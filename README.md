@@ -2,6 +2,17 @@
 
 A microservice for sending notifications to users via email, SMS, and in-app channels.
 
+## Deployed Demo
+
+A demo version of this service is deployed at: [https://notification-service-buco.onrender.com](https://notification-service-buco.onrender.com)
+
+### API Endpoints in Demo
+- Get notification types: [/api/notifications/types](https://notification-service-buco.onrender.com/api/notifications/types)
+- Send notification: POST to `/api/notifications`
+- Get user notifications: `/api/users/{userId}/notifications`
+
+> **Note**: The deployed version has limited Kafka functionality as it's running without a message broker. See the [Deployment Notes](#deployment-notes) section for details.
+
 ## Features
 
 - RESTful API for sending notifications and retrieving user notifications
@@ -112,6 +123,33 @@ The notification service follows a microservice architecture with the following 
 2. **Queue**: Kafka for reliable message delivery and processing
 3. **Workers**: Background processes that consume messages from Kafka and send notifications
 4. **Storage**: MongoDB for storing notification records and status
+
+## Deployment Notes
+
+The local development environment uses Kafka for asynchronous processing, while the deployed demo version operates without Kafka. Here's why Kafka is an important part of the architecture:
+
+### Value of Kafka in the Notification Service
+
+1. **Asynchronous Processing**
+   - Decouples notification requests from processing
+   - Improves API response times under load
+   - Prevents slow notification channels from blocking the API
+
+2. **Reliability and Fault Tolerance**
+   - Message persistence ensures notifications survive service restarts
+   - Automatic retries for failed notifications
+   - Guaranteed delivery even during downstream service outages
+
+3. **Scalability**
+   - Horizontal scaling of notification workers
+   - Load balancing across multiple consumers
+   - Better handling of traffic spikes
+
+4. **System Decoupling**
+   - Service independence between senders and processors
+   - Technology flexibility for future changes
+
+In a production environment, this service would use a managed Kafka service like Confluent Cloud, Upstash, or CloudKarafka.
 
 ## Assumptions and Design Decisions
 
