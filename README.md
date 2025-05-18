@@ -72,6 +72,11 @@ EMAIL_USER=your-email@gmail.com
 EMAIL_PASS=your-email-password
 ```
 
+> **Note on Email Configuration**: The email service is configured but not connected to a real service in this demonstration. To use actual email delivery, you'll need to:
+> 1. Set up an app-specific password if using Gmail (recommended for security)
+> 2. Update the EMAIL_USER and EMAIL_PASS environment variables with your credentials
+> 3. For production use, consider services like SendGrid, Mailgun, or Amazon SES instead of Gmail
+
 ### Installation
 
 #### Using Docker (Recommended)
@@ -115,6 +120,40 @@ The notification service follows a microservice architecture with the following 
 3. **Extensibility**: The service is designed to be easily extended with additional notification channels.
 4. **Scalability**: Each component (API, workers, database) can be scaled independently based on load.
 
+## Testing
+
+### Email Testing
+For testing email functionality without sending actual emails:
+
+1. **Development Environment**:
+   - The service logs email sending attempts without actually delivering emails
+   - Check the console logs to verify email notification processing
+
+2. **For Production Implementation**:
+   - Use [Mailtrap](https://mailtrap.io/) for development and testing
+   - Switch to a production email service like SendGrid or Mailgun
+
+### API Testing
+Test the API endpoints using tools like Postman or curl:
+
+```bash
+# Send a test email notification
+curl -X POST http://localhost:3000/api/notifications \
+  -H "Content-Type: application/json" \
+  -d '{
+    "userId": "test-user-1",
+    "type": "email",
+    "subject": "Test Notification",
+    "message": "This is a test notification",
+    "metadata": {
+      "email": "test@example.com"
+    }
+  }'
+
+# Check notification status
+curl http://localhost:3000/api/users/test-user-1/notifications
+```
+
 ## Future Improvements
 
 1. Implement authentication and authorization
@@ -124,3 +163,4 @@ The notification service follows a microservice architecture with the following 
 5. Implement rate limiting to prevent abuse
 6. Add metrics and monitoring
 7. Implement batch processing for high-volume notifications
+8. Add comprehensive test suite with unit and integration tests
