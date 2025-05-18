@@ -1,15 +1,11 @@
 import Notification from '../models/Notification.js';
 import { producer } from '../config/kafka.js';
 
-/**
- * Create a new notification and queue it for processing
- * @route POST /notifications
- */
+
 export const createNotification = async (req, res) => {
   try {
     const { userId, type, message, recipient } = req.body;
     
-    // Validate required fields
     if (!userId || !type || !message) {
       return res.status(400).json({ 
         error: 'Missing required fields', 
@@ -17,7 +13,6 @@ export const createNotification = async (req, res) => {
       });
     }
     
-    // Validate notification type
     const validTypes = ['email', 'sms', 'in-app'];
     if (!validTypes.includes(type)) {
       return res.status(400).json({ 
@@ -26,12 +21,11 @@ export const createNotification = async (req, res) => {
       });
     }
     
-    // Create notification in database
     const notification = await Notification.create({ 
       userId, 
       type, 
       message,
-      recipient: recipient || null // Optional recipient field (email/phone)
+      recipient: recipient || null 
     });
     
     // Queue notification for processing
@@ -48,7 +42,6 @@ export const createNotification = async (req, res) => {
       }
     });
     
-    // Return success response
     res.status(202).json({ 
       message: 'Notification queued for processing', 
       notificationId: notification._id,
@@ -60,10 +53,6 @@ export const createNotification = async (req, res) => {
   }
 };
 
-/**
- * Get all notifications for a user
- * @route GET /users/:id/notifications
- */
 export const getUserNotifications = async (req, res) => {
   try {
     const userId = req.params.id;
@@ -72,10 +61,8 @@ export const getUserNotifications = async (req, res) => {
       return res.status(400).json({ error: 'User ID is required' });
     }
     
-    // Get notifications for user with optional filtering
     const query = { userId };
     
-    // Allow filtering by status and type
     if (req.query.status) {
       query.status = req.query.status;
     }
@@ -85,7 +72,7 @@ export const getUserNotifications = async (req, res) => {
     }
     
     const notifications = await Notification.find(query)
-      .sort({ createdAt: -1 }) // Sort by newest first
+      .sort({ createdAt: -1 })
       .limit(req.query.limit ? parseInt(req.query.limit) : 100);
     
     res.json({

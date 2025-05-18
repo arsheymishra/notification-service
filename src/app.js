@@ -6,7 +6,6 @@ import notificationRoutes from './routes/notificationRoutes.js';
 // Load environment variables
 dotenv.config();
 
-// Initialize Express app
 const app = express();
 
 // Middleware
