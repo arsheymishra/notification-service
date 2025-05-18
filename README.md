@@ -17,8 +17,8 @@ A demo version of this service is deployed at: [https://notification-service-buc
 
 - RESTful API for sending notifications and retrieving user notifications
 - Support for multiple notification channels:
-  - Email (using Nodemailer)
-  - SMS (mock implementation, can be integrated with Twilio)
+  - Email 
+  - SMS 
   - In-app notifications
 - Message queuing with Kafka for reliable notification delivery
 - Automatic retries for failed notifications with exponential backoff
@@ -76,7 +76,7 @@ Create a `.env` file in the root directory with the following variables:
 ```
 PORT=3000
 NODE_ENV=development
-MONGO_URI=mongodb://localhost:27017/notification-service
+MONGO_URI=
 KAFKA_BROKER=localhost:9092
 EMAIL_SERVICE=gmail
 EMAIL_USER=your-email@gmail.com
@@ -110,11 +110,6 @@ EMAIL_PASS=your-email-password
    ```
    npm start
    ```
-5. For development with auto-reload:
-   ```
-   npm run dev
-   ```
-
 ## Architecture
 
 The notification service follows a microservice architecture with the following components:
@@ -149,8 +144,6 @@ The local development environment uses Kafka for asynchronous processing, while 
    - Service independence between senders and processors
    - Technology flexibility for future changes
 
-In a production environment, this service would use a managed Kafka service like Confluent Cloud, Upstash, or CloudKarafka.
-
 ## Assumptions and Design Decisions
 
 1. **Asynchronous Processing**: Notifications are processed asynchronously to ensure the API remains responsive even under high load.
@@ -166,10 +159,6 @@ For testing email functionality without sending actual emails:
 1. **Development Environment**:
    - The service logs email sending attempts without actually delivering emails
    - Check the console logs to verify email notification processing
-
-2. **For Production Implementation**:
-   - Use [Mailtrap](https://mailtrap.io/) for development and testing
-   - Switch to a production email service like SendGrid or Mailgun
 
 ### API Testing
 Test the API endpoints using tools like Postman or curl:
