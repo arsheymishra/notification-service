@@ -48,7 +48,6 @@ consumer.on('message', async (message) => {
       notification.status = 'sent';
       console.log(`Successfully processed notification ${notificationId}`);
     } else {
-      // Increment attempt count and check if we should retry
       notification.attempts += 1;
       
       if (notification.attempts >= 3) {
@@ -59,7 +58,6 @@ consumer.on('message', async (message) => {
         console.log(`Will retry notification ${notificationId} (attempt ${notification.attempts})`);
         
         // Requeue the notification for retry after a delay
-        // In a real application, you might use a more sophisticated retry strategy
         setTimeout(async () => {
           try {
             const payloads = [

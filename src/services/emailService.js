@@ -12,16 +12,7 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-/**
- * Send an email notification
- * @param {string} to - Recipient email address
- * @param {string} subject - Email subject
- * @param {string} text - Email body text
- * @param {string} html - Optional HTML version of the email
- * @returns {Promise<boolean>} - Success status
- */
 export const sendEmail = async (to, subject, text, html = null) => {
-    // Validate email address format
     if (!to || !validateEmail(to)) {
         console.error('Invalid email address:', to);
         return false;
@@ -34,7 +25,6 @@ export const sendEmail = async (to, subject, text, html = null) => {
         text
     };
     
-    // Add HTML content if provided
     if (html) {
         mailOptions.html = html;
     }
@@ -48,12 +38,6 @@ export const sendEmail = async (to, subject, text, html = null) => {
         return false;
     }
 };
-
-/**
- * Simple email validation function
- * @param {string} email - Email to validate
- * @returns {boolean} - Whether the email is valid
- */
 function validateEmail(email) {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(String(email).toLowerCase());

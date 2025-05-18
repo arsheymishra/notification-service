@@ -8,13 +8,13 @@ const NotificationSchema = new Schema({
   userId: { 
     type: String, 
     required: true,
-    index: true // Index for faster queries by userId
+    index: true
   },
   type: { 
     type: String, 
     required: true,
     enum: ['email', 'sms', 'in-app'],
-    index: true // Index for faster queries by type
+    index: true
   },
   message: { 
     type: String, 
@@ -32,7 +32,7 @@ const NotificationSchema = new Schema({
     type: String, 
     enum: ['pending', 'sent', 'failed'],
     default: 'pending',
-    index: true // Index for faster queries by status
+    index: true 
   },
   attempts: { 
     type: Number, 
@@ -41,17 +41,16 @@ const NotificationSchema = new Schema({
   metadata: { 
     type: Map, 
     of: String, 
-    default: {} // Additional metadata for the notification
+    default: {} 
   },
   readAt: { 
     type: Date, 
     default: null // When the notification was read (for in-app notifications)
   }
 }, { 
-  timestamps: true // Automatically add createdAt and updatedAt fields
+  timestamps: true
 });
 
-// Create compound index for common queries
 NotificationSchema.index({ userId: 1, status: 1, createdAt: -1 });
 
 export default model('Notification', NotificationSchema);
